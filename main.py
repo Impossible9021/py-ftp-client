@@ -2,6 +2,16 @@ import os
 import ftplib
 from ftplib import FTP
 
+def connect():
+    print("------Connect------")
+    host = input("Address of server to connect(exit to quit): ")
+    
+    if (host == "exit"):
+        exit()
+    
+    port = input("Port number(def for default): ")
+    shell(host, port)
+
 def parse(input_str):
     """ A parser of user input for shell(). Returns command and args """
     if (input_str == None or input_str == ""):
@@ -26,9 +36,24 @@ def parse(input_str):
         arg = ""
     return cmd, arg
 
-def shell():
-    """ Shell Mode function. """
+def shell(host = "", port = ""):
+    """ Shell Mode function. Provides a CLI to interact with FTP server """
+    #preparation: connect to the server
+    try:
+        if (port == "def" or port == "" or port == None):
+            ftp = FTP(host)
+        else:
+            ftp = FTP(host, port)
+        ftp.login() # anon login only in this version
+        os.system("echo Entering Shell Mode in 3 seconds")
+        os.system("sleep 3")
+        os.system("clear")
+    except ftplib.all_errors as ex:
+        print("An error occured while login: {0}".format(ex))
+        return
     print("Server response: " + ftp.getwelcome())
+    
+    #enter shell mode
     while(1):
         cmd = input("ftp@{0}~#".format(host))
         cmd, arg = parse(cmd)
@@ -61,27 +86,7 @@ print("Welcome to PFTP - a little Python FTP Client for Linux")
 while (1):
     action = input("[C]onnect | [H]elp | [E]xit?").lower()
     if (action == "c"):
-        print("------Connect------")
-        host = input("Address of server to connect(exit to quit): ")
-        
-        if (host == "exit"):
-            exit()
-        
-        port = input("Port number(def for default): ")
-        
-        try:
-            if (port == "def" or port == "" or port == None):
-                ftp = FTP(host)
-            else:
-                ftp = FTP(host, port)
-            ftp.login() # anon login only in this version
-            os.system("echo Entering Shell Mode in 3 seconds")
-            os.system("sleep 3")
-            os.system("clear")
-        except ftplib.all_errors as ex:
-            print("An error occured while login: {0}".format(ex))
-            break
-        shell()
+        connect()
         break
     elif (action == "h"):
         print_help()
