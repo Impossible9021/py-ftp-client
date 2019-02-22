@@ -7,7 +7,8 @@ Thanks to cs.brown.edu & dlptest.com for free FTP servers.
   + FTP / FTP+SSL support  
   + Bash-like CLI  
   + Anon login support  
+  + Colorful output(v0.2+)  
+  + Configuration file at ~/.pftp_config(v0.2+)  
   
-TODO:  
+# TODO:  
   + More shell mode commands  
-  + Colorful output
